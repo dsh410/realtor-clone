@@ -3,7 +3,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function NavBar() {
   return (
-    <Disclosure as="nav" className="bg-neutral-50">
+    <Disclosure as="nav" className="bg-neutral-50 border-b">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
@@ -43,14 +43,6 @@ export default function NavBar() {
           </div>
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex items-center">
-              <button
-                type="button"
-                className="relative rounded-full bg-gray-800 p-1 text-gray-400  focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-              >
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">View notifications</span>
-                <BellIcon aria-hidden="true" className="size-6" />
-              </button>
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative ml-3">
