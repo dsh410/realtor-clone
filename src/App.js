@@ -9,11 +9,13 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import Offers from './pages/Offers';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
    <>
     <Router>
+      <NavBar/>
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/profile" element={<Profile />} />
