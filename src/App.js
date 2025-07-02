@@ -11,6 +11,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Offers from './pages/Offers';
 import Header from './components/Header';
 
+
 function App() {
   return (
    <>
