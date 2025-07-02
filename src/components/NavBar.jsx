@@ -1,7 +1,22 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useLocation, useNavigate } from 'react-router'
 
 export default function NavBar() {
+    const location = useLocation()
+    const navigation = useNavigate()
+
+    console.log('Current location:', location)
+
+    function pathMatchRoute(route){
+        if(!route) return null;
+
+        if(route === location.pathname) {
+            return true;
+        }
+
+    }
+
   return (
     <Disclosure as="nav" className="bg-neutral-50 border-b">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -12,29 +27,35 @@ export default function NavBar() {
                 alt="Your Company"
                 src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"
                 className="h-5 w-auto"
+                onClick={() => navigation('/')}
               />
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {/* Current: " text-white", Default: "text-stone-950  " */}
-                <a href="#" className="rounded-md  px-3 py-2 text-sm font-medium text-stone-950">
+                <a href="#" className={` ${pathMatchRoute('/') || pathMatchRoute('/home')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
+                onClick={() => navigation('/')}
+                >
                   Home
                 </a>
                 <a
                   href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-stone-950  "
+                  className={` ${pathMatchRoute('/offers')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
+                  onClick={() => navigation('/offers')}
                 >
                   Offers
                 </a>
                 <a
                   href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-stone-950  "
+                  className={` ${pathMatchRoute('/profile')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
+                    onClick={() => navigation('/profile')}
                 >
                   Profile
                 </a>
                 <a
                   href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-stone-950  "
+                  className={` ${pathMatchRoute('/sign-in')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
+                  onClick={() => navigation('/sign-in')}
                 >
                   Sign In
                 </a>
