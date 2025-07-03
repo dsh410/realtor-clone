@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
+import { handleRedirect } from '../utils/helpers';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -30,10 +31,7 @@ export default function SignUp() {
     // Handle Google OAuth sign up
   };
 
-  const handleSignInRedirect = () => {
-    console.log('Navigate to sign in page');
-    // Handle navigation to sign in page
-  };
+;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -219,7 +217,7 @@ export default function SignUp() {
 
             <button
               type="button"
-              onClick={handleSignInRedirect}
+              onClick={() =>handleRedirect('/sign-in')}
               className="w-full flex justify-center py-3 px-4 border-2 border-red-700 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Already have an account? Sign In

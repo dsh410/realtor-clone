@@ -1,5 +1,8 @@
+import { nav } from 'framer-motion/client';
 import React from 'react'
 import { useState } from 'react';
+import { handleRedirect } from '../utils/helpers';
+
 
 export default function SignIn() {
    const [formData, setFormData] = useState({
@@ -7,6 +10,7 @@ export default function SignIn() {
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
+ 
 
   const handleChange = (e) => {
     setFormData({
@@ -24,12 +28,9 @@ export default function SignIn() {
   const handleGoogleSignIn = () => {
     console.log('Sign in with Google');
     // Handle Google OAuth sign in
+ 
   };
 
-  const handleSignUpRedirect = () => {
-    console.log('Navigate to sign up page');
-    // Handle navigation to sign up page
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -147,7 +148,7 @@ export default function SignIn() {
 
             <button
               type="button"
-              onClick={handleSignUpRedirect}
+              onClick={() => handleRedirect('/sign-up')}
               className="w-full flex justify-center py-3 px-4 border-2 border-red-700 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Don't have an account? Sign Up
