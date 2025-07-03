@@ -34,7 +34,7 @@ export default function Header() {
     <header className="bg-white">
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8">
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
              <img
                 alt="Your Company"
@@ -53,7 +53,7 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
          <a
-                  href="#"
+                  href=""
                   className={` ${pathMatchRoute('/sign-in')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
                   onClick={() => navigation('/sign-in')}
                 >
@@ -75,7 +75,7 @@ export default function Header() {
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center gap-x-6">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img
                 alt=""
@@ -84,7 +84,7 @@ export default function Header() {
               />
             </a>
             <a
-              href="#"
+              href=""
               className="ml-auto rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign up
@@ -113,7 +113,7 @@ export default function Header() {
               </div>
               <div className="py-6">
                 <a
-                  href="#"
+                  href=""
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Log in
