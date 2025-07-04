@@ -1,5 +1,6 @@
 
- export const handleRedirect = (url) => {
-  window.location.href = `${url}`;
 
+ export const handleRedirect = (event, url) => {
+  event.preventDefault();
+  window.location.href = `${url}`;
   };

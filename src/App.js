@@ -1,3 +1,4 @@
+
 import {  
   BrowserRouter as Router,
   Routes,
@@ -10,6 +11,13 @@ import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import Offers from './pages/Offers';
 import Header from './components/Header';
+import { 
+  HOME_PATH, 
+  PROFILE_PATH, 
+  SIGN_IN_PATH, 
+  SIGN_UP_PATH, 
+  OFFERS_PATH 
+} from './constants';
 
 
 function App() {
@@ -18,12 +26,12 @@ function App() {
     <Router>
       <Header/>
       <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path={HOME_PATH} element={<Home/>} />
+        <Route path={PROFILE_PATH} element={<Profile />} />
+        <Route path={SIGN_IN_PATH} element={<SignIn />} />
+        <Route path={SIGN_UP_PATH} element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/offers" element={<Offers />} />
+        <Route path={OFFERS_PATH} element={<Offers />} />
       </Routes>
     </Router>
    </>

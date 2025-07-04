@@ -1,6 +1,22 @@
 import React from 'react'
 import { useState } from 'react';
 import { handleRedirect } from '../utils/helpers';
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { db } from '../firebase';
+import { 
+  serverTimestamp, 
+  doc, 
+  setDoc 
+} from 'firebase/firestore';
+import { 
+  HOME_PATH,
+  SIGN_IN_PATH,
+} from '../constants';
+
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -20,9 +36,30 @@ export default function SignUp() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Sign up attempt:', formData);
+  try {
+    const auth = getAuth();
+    const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+    const user = userCredential.user;
+
+    await updateProfile(user, {
+      displayName: `${formData.firstName} ${formData.lastName}`
+    });
+
+    const formDataCopy = { ...formData };
+    delete formDataCopy.password;
+    formDataCopy.timestamp = serverTimestamp();
+
+    await setDoc(doc(db, 'users', user.uid), formDataCopy); 
+
+    handleRedirect(e, HOME_PATH); // Replace with your home path
+
+  } catch (error) {
+    console.error('Error creating user:', error);
+    alert('Error creating user: ' + error.message);
+    
+  }
     // Handle sign up logic here
   };
 
@@ -173,11 +210,11 @@ export default function SignUp() {
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-800">
               I agree to the{' '}
-              <a href="#" className="text-red-700 hover:text-red-800 underline font-medium">
+              <a  className="text-red-700 hover:text-red-800 underline font-medium">
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="#" className="text-red-700 hover:text-red-800 underline font-medium">
+              <a  className="text-red-700 hover:text-red-800 underline font-medium">
                 Privacy Policy
               </a>
             </label>
@@ -217,7 +254,7 @@ export default function SignUp() {
 
             <button
               type="button"
-              onClick={() =>handleRedirect('/sign-in')}
+              onClick={(event) => handleRedirect(event, `${SIGN_IN_PATH}`)}
               className="w-full flex justify-center py-3 px-4 border-2 border-red-700 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Already have an account? Sign In

@@ -1,64 +1,63 @@
 import { useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation } from 'react-router'
+import { handleRedirect } from '../utils/helpers'
+import { Link, Navigate } from 'react-router-dom';
+import {
+  HOME_PATH,
+  PROFILE_PATH,
+  SIGN_IN_PATH,
+  OFFERS_PATH,
+  SIGN_UP_PATH
+} from '../constants'
 
- 
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const location = useLocation()
-    const navigation = useNavigate()
-    
- 
- 
+  const location = useLocation()
 
-    console.log('Current location:', location)
+  function pathMatchRoute(route) {
+    if (!route) return null;
 
-    function pathMatchRoute(route){
-        if(!route) return null;
-
-        if(route === location.pathname) {
-            return true;
-        }
-
+    if (route === location.pathname) {
+      return true;
     }
-    const navigate = [
-        { name: 'Home', href: '/', current: pathMatchRoute('/') || pathMatchRoute('/home'), class :` ${pathMatchRoute('/') || pathMatchRoute('/home')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`},
-        { name: 'Offers', href: '/offers', current: pathMatchRoute('/offers'), class :` ${pathMatchRoute('/offers')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`},
-        { name: 'Profile', href: '/profile', current: pathMatchRoute('/profile'), class :` ${pathMatchRoute('/profile')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`},
-    ]
 
+  }
+  const navigate = [
+    { name: 'Home', href: `${HOME_PATH}`, current: pathMatchRoute('/') || pathMatchRoute('/home'), class: ` ${pathMatchRoute('/') || pathMatchRoute('/home') ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}` },
+    { name: 'Offers', href: `${OFFERS_PATH}`, current: pathMatchRoute('/offers'), class: ` ${pathMatchRoute('/offers') ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}` },
+    { name: 'Profile', href: `${PROFILE_PATH}`, current: pathMatchRoute('/profile'), class: ` ${pathMatchRoute('/profile') ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}` },
+  ]
 
   return (
     <header className="bg-white">
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8">
         <div className="flex lg:flex-1">
-          <a href="" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-             <img
-                alt="Your Company"
-                src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"
-                className="h-5 w-auto"
-                onClick={() => navigation('/')}
-              />
-          </a>
+          <Link to={`${HOME_PATH}`} className="-m-1.5 p-1.5">
+            <img
+              alt="realtor.com logo"
+              src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"
+              className="h-5 w-auto"
+            />
+          </Link>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigate.map((item) => (
-            <a key={item.name} href={item.href} className={item.class}>
+            <Link key={item.name} to={item.href} className={item.class}>
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
-         <a
-                  href=""
-                  className={` ${pathMatchRoute('/sign-in')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
-                  onClick={() => navigation('/sign-in')}
-                >
-                  Sign In
-                </a>
+          <Link
+            to={`${SIGN_IN_PATH}`}
+            className={` ${pathMatchRoute(`${SIGN_IN_PATH}`) ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
+
+          >
+            Sign In
+          </Link>
         </div>
         <div className="flex lg:hidden">
           <button
@@ -75,20 +74,20 @@ export default function Header() {
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center gap-x-6">
-            <a href="" className="-m-1.5 p-1.5">
+            <Link to={`${HOME_PATH}`} className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img
                 alt=""
                 src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                 className="h-8 w-auto"
               />
-            </a>
-            <a
-              href=""
+            </Link>
+            <Link
+              to={`${SIGN_UP_PATH}`}
               className="ml-auto rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Sign up
-            </a>
+            </Link>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(false)}

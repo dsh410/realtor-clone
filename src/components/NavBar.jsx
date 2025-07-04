@@ -1,6 +1,13 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useLocation, useNavigate } from 'react-router'
+import { 
+  HOME_PATH,
+  OFFERS_PATH,
+  PROFILE_PATH,
+  SIGN_IN_PATH
+} from '../constants'
+import { Link } from 'react-router-dom'
 
 export default function NavBar() {
     const location = useLocation()
@@ -33,32 +40,31 @@ export default function NavBar() {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {/* Current: " text-white", Default: "text-stone-950  " */}
-                <a href="#" className={` ${pathMatchRoute('/') || pathMatchRoute('/home')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
-                onClick={() => navigation('/')}
+                <Link to={`${HOME_PATH}`} className={` ${pathMatchRoute('/') || pathMatchRoute('/home')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
                 >
                   Home
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to={`${OFFERS_PATH}`}
                   className={` ${pathMatchRoute('/offers')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
-                  onClick={() => navigation('/offers')}
+
                 >
                   Offers
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to={`${PROFILE_PATH}`}
                   className={` ${pathMatchRoute('/profile')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
                     onClick={() => navigation('/profile')}
                 >
                   Profile
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to={`${SIGN_IN_PATH}`}
                   className={` ${pathMatchRoute('/sign-in')  ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
                   onClick={() => navigation('/sign-in')}
                 >
                   Sign In
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -78,12 +84,12 @@ export default function NavBar() {
                   className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
                   <MenuItem>
-                    <a
-                      href="#"
+                    <Link
+                      to={`${PROFILE_PATH}`}
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                     >
                       Your Profile
-                    </a>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <a
