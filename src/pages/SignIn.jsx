@@ -1,6 +1,12 @@
 
 import { useState } from 'react';
 import { SIGN_UP_PATH } from '../constants';
+import { toast } from 'react-toastify';
+import { 
+  getAuth, 
+  signInWithPopup, 
+  GoogleAuthProvider 
+} from 'firebase/auth';
 
 
 
@@ -27,12 +33,24 @@ export default function SignIn({ handleRedirect }) {
 
 
 
-  const handleGoogleSignIn = () => {
-    console.log('Sign in with Google');
-    // Handle Google OAuth sign in
+  const handleOAuthSignIn = async () => {
+    try {
+      
+      console.log('Attempting OAuth sign in with Google...');
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
 
+      const result = await signInWithPopup(auth, provider)
+
+      const user = result.user;
+
+      console.log('OAuth sign in successful:', user);
+    } catch (error) {
+
+      toast.error('Error during OAuth sign in: ' + error.message);
+      // Handle error (e.g., show a toast notification)
+    }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -136,7 +154,7 @@ export default function SignIn({ handleRedirect }) {
 
             <button
               type="button"
-              onClick={handleGoogleSignIn}
+              onClick={handleOAuthSignIn}
               className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
