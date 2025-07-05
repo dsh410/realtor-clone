@@ -15,6 +15,7 @@ import {
   HOME_PATH,
   SIGN_IN_PATH,
 } from '../constants';
+import { toast } from "react-toastify";
 
 
 export default function SignUp({ handleRedirect }) {
@@ -55,9 +56,8 @@ export default function SignUp({ handleRedirect }) {
       handleRedirect(e, `${HOME_PATH}`); // Replace with your home path
 
     } catch (error) {
-      console.error('Error creating user:', error);
-      alert('Error creating user: ' + error.message);
-
+  
+      toast.error('Error creating account: ' + error.message, );
     }
     // Handle sign up logic here
   };
@@ -66,8 +66,6 @@ export default function SignUp({ handleRedirect }) {
     console.log('Sign up with Google');
     // Handle Google OAuth sign up
   };
-
-  ;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

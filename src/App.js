@@ -1,6 +1,5 @@
 
 import {
-  BrowserRouter as Router,
   Routes,
   Route
 } from 'react-router-dom';
@@ -19,10 +18,12 @@ import {
   OFFERS_PATH
 } from './constants';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, Slide } from 'react-toastify';
 
 
 function App() {
   const navigate = useNavigate();
+  
 
   const handleRedirect = (e, path) => {
     e.preventDefault(); // Prevent default form submission
@@ -40,6 +41,19 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path={OFFERS_PATH} element={<Offers />} />
       </Routes>
+      <ToastContainer
+position="top-center"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+transition={Slide}
+/>
     </>
   );
 }
