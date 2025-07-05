@@ -1,18 +1,17 @@
 
-import React from 'react'
 import { useState } from 'react';
-import { handleRedirect } from '../utils/helpers';
-import { SIGN_UP_PATH } from '../constants';
+import {SIGN_UP_PATH} from '../constants';
 
 
-export default function SignIn() {
+
+
+export default function SignIn({ handleRedirect }) {
    const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
  
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -25,6 +24,8 @@ export default function SignIn() {
     console.log('Sign in attempt:', formData);
     // Handle sign in logic here
   };
+
+
 
   const handleGoogleSignIn = () => {
     console.log('Sign in with Google');

@@ -18,22 +18,30 @@ import {
   SIGN_UP_PATH, 
   OFFERS_PATH 
 } from './constants';
+import { useNavigate } from 'react-router-dom';
 
 
 function App() {
+    const navigate = useNavigate();
+
+    const handleRedirect = (e, path) => {
+
+  e.preventDefault(); // Prevent default form submission
+  // Your logic here
+  navigate(`${path}`);
+}
   return (
    <>
-    <Router>
+ 
       <Header/>
       <Routes>
         <Route path={HOME_PATH} element={<Home/>} />
         <Route path={PROFILE_PATH} element={<Profile />} />
-        <Route path={SIGN_IN_PATH} element={<SignIn />} />
-        <Route path={SIGN_UP_PATH} element={<SignUp />} />
+        <Route path={SIGN_IN_PATH} element={<SignIn handleRedirect={handleRedirect} />} />
+        <Route path={SIGN_UP_PATH} element={<SignUp handleRedirect={handleRedirect} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path={OFFERS_PATH} element={<Offers />} />
       </Routes>
-    </Router>
    </>
   );
 }

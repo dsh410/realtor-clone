@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState } from 'react';
-import { handleRedirect } from '../utils/helpers';
 import { 
   getAuth, 
   createUserWithEmailAndPassword,
@@ -18,7 +17,7 @@ import {
 } from '../constants';
 
 
-export default function SignUp() {
+export default function SignUp({ handleRedirect }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -53,7 +52,7 @@ export default function SignUp() {
 
     await setDoc(doc(db, 'users', user.uid), formDataCopy); 
 
-    handleRedirect(e, HOME_PATH); // Replace with your home path
+    handleRedirect(e, `${HOME_PATH}`); // Replace with your home path
 
   } catch (error) {
     console.error('Error creating user:', error);
