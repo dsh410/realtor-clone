@@ -25,7 +25,7 @@ function App() {
   const navigate = useNavigate();
   
 
-  const handleRedirect = (e, path) => {
+  const handleRedirect = (e = {}, path) => {
     e.preventDefault(); // Prevent default form submission
     // Your logic here
     navigate(`${path}`);
@@ -36,8 +36,8 @@ function App() {
       <Routes>
         <Route path={HOME_PATH} element={<Home />} />
         <Route path={PROFILE_PATH} element={<Profile />} />
-        <Route path={SIGN_IN_PATH} element={<SignIn handleRedirect={handleRedirect} />} />
-        <Route path={SIGN_UP_PATH} element={<SignUp handleRedirect={handleRedirect} />} />
+        <Route path={SIGN_IN_PATH} element={<SignIn redirect={handleRedirect} />} />
+        <Route path={SIGN_UP_PATH} element={<SignUp redirect={handleRedirect} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path={OFFERS_PATH} element={<Offers />} />
       </Routes>

@@ -7,11 +7,20 @@ import {
   signInWithPopup, 
   GoogleAuthProvider 
 } from 'firebase/auth';
+import {
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp
+} from 'firebase/firestore';
+import { HOME_PATH } from '../constants';
+import { db } from '../firebase';
 
 
 
 
-export default function SignIn({ handleRedirect }) {
+
+export default function SignIn({ redirect }) {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -27,30 +36,33 @@ export default function SignIn({ handleRedirect }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Sign in attempt:', formData);
-    // Handle sign in logic here
   };
 
 
 
-  const handleOAuthSignIn = async () => {
-    try {
-      
-      console.log('Attempting OAuth sign in with Google...');
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
-
-      const result = await signInWithPopup(auth, provider)
-
-      const user = result.user;
-
-      console.log('OAuth sign in successful:', user);
-    } catch (error) {
-
-      toast.error('Error during OAuth sign in: ' + error.message);
-      // Handle error (e.g., show a toast notification)
-    }
-  };
+  const handleOAuthSignIn = async (e) => {
+     try {
+         const auth = getAuth();
+         const provider = new GoogleAuthProvider();
+         const result = await signInWithPopup(auth, provider)
+         const user = result.user;
+   
+         const docRef = doc(db, 'users', user.uid);
+         const docSnap = await getDoc(docRef);
+   
+         if (!docSnap.exists()){
+           await setDoc(docRef, {
+             name: user.displayName,
+             email: user.email,
+             time  : serverTimestamp(),
+         });
+       }
+        redirect(e, `${HOME_PATH}`);
+       } catch (error) {
+         toast.error('Error during OAuth sign in: ' + error.message);
+       }
+     };
+   
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -154,7 +166,7 @@ export default function SignIn({ handleRedirect }) {
 
             <button
               type="button"
-              onClick={handleOAuthSignIn}
+              onClick={(event) => handleOAuthSignIn(event)}
               className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -168,7 +180,7 @@ export default function SignIn({ handleRedirect }) {
 
             <button
               type="button"
-              onClick={(event) => handleRedirect(event, `${SIGN_UP_PATH}`)}
+              onClick={(event) => redirect(event, `${SIGN_UP_PATH}`)}
               className="w-full flex justify-center py-3 px-4 border-2 border-red-700 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Don't have an account? Sign Up

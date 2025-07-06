@@ -9,28 +9,25 @@ import { db } from '../firebase';
 import {
   serverTimestamp,
   doc,
-  setDoc
+  setDoc,
+  getDoc
 } from 'firebase/firestore';
 import {
   HOME_PATH,
   SIGN_IN_PATH,
 } from '../constants';
 import { toast } from "react-toastify";
-import {
-  GoogleAuthProvider,
-  signInWithPopup
-} from 'firebase/auth';
 
-
-
-export default function SignUp({ handleRedirect }) {
+export default function SignUp({ redirect }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    termsAccepted: false
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -38,19 +35,24 @@ export default function SignUp({ handleRedirect }) {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      termsAccepted
     });
   };
 
   const handleSubmit = async (e, termsAccepted) => {
     e.preventDefault();
-    try {
       if (Object.values(formData).every(field => field === '')) {
-        return toast.error('All fields are required.');
+          return toast.error('All fields are required.');
       }
-      if (!termsAccepted) {
-        return toast.error('You must accept the terms and conditions to proceed.');
+       if (!termsAccepted) {
+          return toast.error('You must accept the terms and conditions to proceed.');
       }
+      if (formData.password !== formData.confirmPassword) {
+        return toast.error('Passwords do not match.');
+      }
+
+    try {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const user = userCredential.user;
@@ -61,7 +63,7 @@ export default function SignUp({ handleRedirect }) {
       delete formDataCopy.password;
       formDataCopy.timestamp = serverTimestamp();
       await setDoc(doc(db, 'users', user.uid), formDataCopy);
-      handleRedirect(e, `${HOME_PATH}`); // Replace with your home path
+      redirect(e, `${HOME_PATH}`); // Replace with your home path
     } catch (error) {
       toast.error('Error creating account: ' + error.message,);
     }
@@ -69,20 +71,6 @@ export default function SignUp({ handleRedirect }) {
 
   const handleTermsAndConditions = (termsAccepted) => {
     setTermsAccepted(!termsAccepted);
-    console.log('Terms and conditions accepted:', termsAccepted);
-  };
-
-  const handleOAuthSignIn = async () => {
-    try {
-      console.log('Attempting OAuth sign in with Google...');
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider)
-      const user = result.user;
-      console.log('OAuth sign in successful:', user);
-    } catch (error) {
-      toast.error('Error during OAuth sign in: ' + error.message);
-    }
   };
 
   return (
@@ -247,7 +235,7 @@ export default function SignUp({ handleRedirect }) {
 
             <button
               type="button"
-              onClick={(event) => handleRedirect(event, `${SIGN_IN_PATH}`)}
+              onClick={(event) => redirect(event, `${SIGN_IN_PATH}`)}
               className="w-full flex justify-center py-3 px-4 border-2 border-red-700 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Already have an account? Sign In
