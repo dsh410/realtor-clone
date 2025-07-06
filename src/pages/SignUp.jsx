@@ -16,9 +16,9 @@ import {
   SIGN_IN_PATH,
 } from '../constants';
 import { toast } from "react-toastify";
-import { 
-  GoogleAuthProvider, 
-  signInWithPopup 
+import {
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 
 
@@ -44,59 +44,46 @@ export default function SignUp({ handleRedirect }) {
 
   const handleSubmit = async (e, termsAccepted) => {
     e.preventDefault();
-    if (!termsAccepted) {
-      return toast.error('You must accept the terms and conditions to proceed.');
-    }
-
     try {
+      if (Object.values(formData).every(field => field === '')) {
+        return toast.error('All fields are required.');
+      }
+      if (!termsAccepted) {
+        return toast.error('You must accept the terms and conditions to proceed.');
+      }
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const user = userCredential.user;
-
       await updateProfile(user, {
         displayName: `${formData.firstName} ${formData.lastName}`
       });
-
       const formDataCopy = { ...formData };
       delete formDataCopy.password;
       formDataCopy.timestamp = serverTimestamp();
-
       await setDoc(doc(db, 'users', user.uid), formDataCopy);
-
       handleRedirect(e, `${HOME_PATH}`); // Replace with your home path
-
     } catch (error) {
-      
-      toast.error('Error creating account: ' + error.message, );
+      toast.error('Error creating account: ' + error.message,);
     }
   };
 
   const handleTermsAndConditions = (termsAccepted) => {
-    // Logic to handle terms and conditions acceptance
     setTermsAccepted(!termsAccepted);
-  console.log('Terms and conditions accepted:', termsAccepted);
+    console.log('Terms and conditions accepted:', termsAccepted);
   };
 
-   const handleOAuthSignIn = async () => {
+  const handleOAuthSignIn = async () => {
     try {
-      
       console.log('Attempting OAuth sign in with Google...');
       const auth = getAuth();
       const provider = new GoogleAuthProvider();
-
       const result = await signInWithPopup(auth, provider)
-
       const user = result.user;
-
       console.log('OAuth sign in successful:', user);
     } catch (error) {
-
       toast.error('Error during OAuth sign in: ' + error.message);
-      // Handle error (e.g., show a toast notification)
     }
   };
-
- 
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
