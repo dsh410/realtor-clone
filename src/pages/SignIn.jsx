@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { 
   getAuth, 
   signInWithPopup, 
+  signInWithEmailAndPassword,
+  auth,
   GoogleAuthProvider 
 } from 'firebase/auth';
 import {
@@ -16,16 +18,13 @@ import {
 import { HOME_PATH } from '../constants';
 import { db } from '../firebase';
 
-
-
-
-
 export default function SignIn({ redirect }) {
+ const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
+  const { email, password } = formData;
 
   const handleChange = (e) => {
     setFormData({
@@ -37,8 +36,6 @@ export default function SignIn({ redirect }) {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-
-
 
   const handleOAuthSignIn = async (e) => {
      try {
@@ -62,8 +59,25 @@ export default function SignIn({ redirect }) {
          toast.error('Error during OAuth sign in: ' + error.message);
        }
      };
-   
 
+       const onSubmit = async (e) => {
+    e.preventDefault();
+ try {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      if (userCredential.user) {
+        redirect(e, `${HOME_PATH}`);
+      }
+    } catch (error) {
+      toast.error("Bad user credentials");
+    }
+  
+  };
+   
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -149,7 +163,7 @@ export default function SignIn({ redirect }) {
           <div className="space-y-4">
             <button
               type="button"
-              onClick={handleSubmit}
+              onClick={onSubmit}
               className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Sign In

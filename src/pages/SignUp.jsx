@@ -10,7 +10,6 @@ import {
   serverTimestamp,
   doc,
   setDoc,
-  getDoc
 } from 'firebase/firestore';
 import {
   HOME_PATH,
@@ -25,27 +24,27 @@ export default function SignUp({ redirect }) {
     email: '',
     password: '',
     confirmPassword: '',
-    termsAccepted: false
+    isTermsAccepted: false
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
+
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-      termsAccepted
+      isTermsAccepted: e.target.checked,
     });
   };
 
-  const handleSubmit = async (e, termsAccepted) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
       if (Object.values(formData).every(field => field === '')) {
           return toast.error('All fields are required.');
       }
-       if (!termsAccepted) {
+       if (!formData.isTermsAccepted) {
           return toast.error('You must accept the terms and conditions to proceed.');
       }
       if (formData.password !== formData.confirmPassword) {
@@ -53,24 +52,20 @@ export default function SignUp({ redirect }) {
       }
 
     try {
-      const auth = getAuth();
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      const user = userCredential.user;
-      await updateProfile(user, {
-        displayName: `${formData.firstName} ${formData.lastName}`
-      });
-      const formDataCopy = { ...formData };
-      delete formDataCopy.password;
-      formDataCopy.timestamp = serverTimestamp();
-      await setDoc(doc(db, 'users', user.uid), formDataCopy);
-      redirect(e, `${HOME_PATH}`); // Replace with your home path
+        const auth = getAuth();
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const user = userCredential.user;
+        await updateProfile(user, {
+          displayName: `${formData.firstName} ${formData.lastName}`
+        });
+        const formDataCopy = { ...formData };
+        delete formDataCopy.password;
+        formDataCopy.timestamp = serverTimestamp();
+        await setDoc(doc(db, 'users', user.uid), formDataCopy);
+        redirect(e, `${HOME_PATH}`); // Replace with your home path
     } catch (error) {
-      toast.error('Error creating account: ' + error.message,);
+        toast.error('Error creating account: ' + error.message);
     }
-  };
-
-  const handleTermsAndConditions = (termsAccepted) => {
-    setTermsAccepted(!termsAccepted);
   };
 
   return (
@@ -205,14 +200,14 @@ export default function SignUp({ redirect }) {
 
           <div className="flex items-center">
             <input
-              id="terms"
-              name="terms"
+              id="isTermsAccepted"
+              name="isTermsAccepted"
               type="checkbox"
               required
-              onChange={() => handleTermsAndConditions(termsAccepted)}
+              onChange={handleChange}
               className="h-4 w-4 text-red-700 focus:ring-red-600 border-gray-300 rounded"
             />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-800">
+            <label htmlFor="isTermsAccepted" className="ml-2 block text-sm text-gray-800">
               I agree to the{' '}
               <a className="text-red-700 hover:text-red-800 underline font-medium">
                 Terms of Service
@@ -227,7 +222,7 @@ export default function SignUp({ redirect }) {
           <div className="space-y-4">
             <button
               type="button"
-              onClick={(event) => handleSubmit(event, termsAccepted)}
+              onClick={(event) => handleSubmit(event)}
               className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Create Account
