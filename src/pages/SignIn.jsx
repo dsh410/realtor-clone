@@ -15,8 +15,9 @@ import {
   getDoc,
   serverTimestamp
 } from 'firebase/firestore';
-import { HOME_PATH } from '../constants';
+import { HOME_PATH,FORGOT_PASSWORD_PATH } from '../constants';
 import { db } from '../firebase';
+import { Link } from 'react-router-dom';
 
 export default function SignIn({ redirect }) {
  const [showPassword, setShowPassword] = useState(false);
@@ -154,9 +155,9 @@ export default function SignIn({ redirect }) {
             </div>
 
             <div className="text-sm">
-              <a className="font-medium text-red-700 hover:text-red-800 underline">
+              <Link to={`${FORGOT_PASSWORD_PATH}`} className="font-medium text-red-700 hover:text-red-800 underline">
                 Forgot your password?
-              </a>
+              </Link>
             </div>
           </div>
 

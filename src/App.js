@@ -38,7 +38,7 @@ function App() {
         <Route path={PROFILE_PATH} element={<Profile />} />
         <Route path={SIGN_IN_PATH} element={<SignIn redirect={handleRedirect} />} />
         <Route path={SIGN_UP_PATH} element={<SignUp redirect={handleRedirect} />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword redirect={handleRedirect} />} />
         <Route path={OFFERS_PATH} element={<Offers />} />
       </Routes>
       <ToastContainer
