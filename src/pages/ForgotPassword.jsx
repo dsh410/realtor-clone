@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
-import { Link, redirect } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { HOME_PATH, SIGN_IN_PATH } from '../constants';
 
-export default function ForgotPassword({ redirect }) {
+export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,9 +21,8 @@ export default function ForgotPassword({ redirect }) {
     }
   };
 
-  const handleBackToSignIn = (e) => {
-    e.preventDefault();
-    redirect(e,`${SIGN_IN_PATH}`); // Redirect to home or sign in page
+  const handleBackToSignIn = () => {
+    navigate(`${SIGN_IN_PATH}`); // Redirect to home or sign in page
     // Handle navigation to sign in page
   };
 

@@ -8,11 +8,14 @@ import {
   PROFILE_PATH,
   SIGN_IN_PATH,
   OFFERS_PATH,
-  SIGN_UP_PATH
+  SIGN_UP_PATH,
+  SIGN_OUT_PATH,
 } from '../constants'
+import { getAuth } from 'firebase/auth';
 
 
 export default function Header() {
+  const auth = getAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
 
@@ -50,13 +53,21 @@ export default function Header() {
           ))}
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
-          <Link
-            to={`${SIGN_IN_PATH}`}
-            className={` ${pathMatchRoute(`${SIGN_IN_PATH}`) ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
-
-          >
-            Sign In
-          </Link>
+          {auth.currentUser ? (
+            <Link
+              to={`${SIGN_OUT_PATH}`}
+              className="px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold"
+            >
+              Sign Out
+            </Link>
+          ) : (
+            <Link
+              to={`${SIGN_IN_PATH}`}
+              className="rounded-md px-3 py-2 text-sm font-medium text-stone-950"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
         <div className="flex lg:hidden">
           <button

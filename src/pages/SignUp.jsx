@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useState } from 'react';
 import {
   getAuth,
@@ -16,8 +16,10 @@ import {
   SIGN_IN_PATH,
 } from '../constants';
 import { toast } from "react-toastify";
+import { useNavigate } from 'react-router';
 
 export default function SignUp({ redirect }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -62,7 +64,7 @@ export default function SignUp({ redirect }) {
         delete formDataCopy.password;
         formDataCopy.timestamp = serverTimestamp();
         await setDoc(doc(db, 'users', user.uid), formDataCopy);
-        redirect(e, `${HOME_PATH}`); // Replace with your home path
+        navigate(`${HOME_PATH}`); // Replace with your home path
     } catch (error) {
         toast.error('Error creating account: ' + error.message);
     }
@@ -230,7 +232,7 @@ export default function SignUp({ redirect }) {
 
             <button
               type="button"
-              onClick={(event) => redirect(event, `${SIGN_IN_PATH}`)}
+              onClick={(event) => navigate(`${SIGN_IN_PATH}`)}
               className="w-full flex justify-center py-3 px-4 border-2 border-red-700 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Already have an account? Sign In

@@ -18,8 +18,11 @@ import {
 import { HOME_PATH,FORGOT_PASSWORD_PATH } from '../constants';
 import { db } from '../firebase';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-export default function SignIn({ redirect }) {
+export default function SignIn() {
+  const navigate = useNavigate();
+  const auth = getAuth();
  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -55,7 +58,7 @@ export default function SignIn({ redirect }) {
              time  : serverTimestamp(),
          });
        }
-        redirect(e, `${HOME_PATH}`);
+        navigate(`${HOME_PATH}`);
        } catch (error) {
          toast.error('Error during OAuth sign in: ' + error.message);
        }
@@ -71,7 +74,7 @@ export default function SignIn({ redirect }) {
         password
       );
       if (userCredential.user) {
-        redirect(e, `${HOME_PATH}`);
+        navigate(`${HOME_PATH}`);
       }
     } catch (error) {
       toast.error("Bad user credentials");
@@ -195,7 +198,7 @@ export default function SignIn({ redirect }) {
 
             <button
               type="button"
-              onClick={(event) => redirect(event, `${SIGN_UP_PATH}`)}
+              onClick={() => navigate( `${SIGN_UP_PATH}`)}
               className="w-full flex justify-center py-3 px-4 border-2 border-red-700 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-colors duration-200"
             >
               Don't have an account? Sign Up

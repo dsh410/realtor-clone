@@ -1,11 +1,15 @@
 import React from 'react'
 import { useState } from 'react';
+import { getAuth } from 'firebase/auth';
 
 export default function Profile() {
+  const auth = getAuth();
  const [formData, setFormData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com'
+    name: auth.currentUser?.displayName,
+    email: auth.currentUser?.email
   });
+  console.log('current user', auth.currentUser);
+  // State to manage form editing
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -59,21 +63,6 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="text-sm font-medium text-red-700 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-600 rounded px-2 py-1"
-            >
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </header>
 
       {/* Main Content */}
       <main className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
