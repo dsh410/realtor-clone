@@ -12,12 +12,14 @@ import {
   SIGN_OUT_PATH,
 } from '../constants'
 import { getAuth } from 'firebase/auth';
+import { useAuthStatus } from '../hooks/useAuthStatus';
 
 
 export default function Header() {
   const auth = getAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
+  const { isLoggedIn, setSignOut } = useAuthStatus();
 
   function pathMatchRoute(route) {
     if (!route) return null;
@@ -53,17 +55,17 @@ export default function Header() {
           ))}
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
-          {auth.currentUser ? (
+          {isLoggedIn ? (
             <Link
-              to={`${SIGN_OUT_PATH}`}
-              className="px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold"
+              onClick={() => setSignOut(true)}
+              className={` ${pathMatchRoute(`${SIGN_OUT_PATH}`) ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
             >
               Sign Out
             </Link>
           ) : (
             <Link
               to={`${SIGN_IN_PATH}`}
-              className="rounded-md px-3 py-2 text-sm font-medium text-stone-950"
+              className={` ${pathMatchRoute(`${SIGN_IN_PATH}`) ? 'px-4 py-2 bg-white text-red-800 border-b-4 border-red-700 font-semibold' : `rounded-md  px-3 py-2 text-sm font-medium text-stone-950`}`}
             >
               Sign In
             </Link>

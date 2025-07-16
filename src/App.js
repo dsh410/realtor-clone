@@ -11,6 +11,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Offers from './pages/Offers';
 import Header from './components/Header';
 import SignOut from './pages/SignOut';
+import PrivateRoute from './components/PrivateRoute';
 import {
   HOME_PATH,
   PROFILE_PATH,
@@ -20,19 +21,20 @@ import {
   FORGOT_PASSWORD_PATH,
   SIGN_OUT_PATH
 } from './constants';
-import { useNavigate } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
 
 
 function App() {
-  const navigate = useNavigate();
-
   return (
     <>
       <Header />
       <Routes>
         <Route path={HOME_PATH} element={<Home />} />
-        <Route path={PROFILE_PATH} element={<Profile />} />
+        <Route
+            path={PROFILE_PATH} element={<PrivateRoute/>} >
+            <Route  path={PROFILE_PATH} element={<Profile/>}/>
+        </Route>
+        <Route />
         <Route path={SIGN_IN_PATH} element={<SignIn />} />
         <Route path={SIGN_UP_PATH} element={<SignUp />} />
         <Route path={SIGN_OUT_PATH} element={<SignOut />} />
