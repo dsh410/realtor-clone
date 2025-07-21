@@ -1,10 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { getAuth, updateProfile, updateEmail, sendEmailVerification } from 'firebase/auth';
-import { toast } from 'react-toastify';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import whiteSpinner from '../public/white-Spinner@1x-1.0s-200px-200px (1).svg';
+import { getAuth } from 'firebase/auth';
 
 export default function Profile() {
   const auth = getAuth();
@@ -12,8 +8,7 @@ export default function Profile() {
     name: auth.currentUser?.displayName,
     email: auth.currentUser?.email
   });
-  
-  
+  console.log('current user', auth.currentUser);
   // State to manage form editing
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,47 +21,6 @@ export default function Profile() {
     });
   };
 
-  const onSubmit = async(e) => {
-    e.preventDefault();
-    setIsLoading(true);
-      const docRef = doc(db, 'users', auth.currentUser.uid);
-
-    try{
-      if(auth.currentUser.displayName !== formData.name) {
-        await updateProfile(auth.currentUser, {displayName: formData.name});
-        // Update email if it has changed
-      }
-
-      if(auth.currentUser.email !== formData.email) {
-          if (auth.currentUser.emailVerified) {
-            await updateEmail(auth.currentUser, formData.email );
-            console.log('Email updated successfully', auth.currentUser.emailVerified);
-          }  else {
-            await sendEmailVerification(formData.email);
-           return toast.info('Please verify your new email address.');
-          }   
-
-      } 
-      console.log('user', auth.currentUser, 'formData', formData);
-
-       await updateDoc(docRef, {
-        name: formData.name,
-        email: formData.email,
-        time: new Date()
-      });
-   
-      toast.success('Profile updated successfully!');
-      setIsLoading(false);
-
-    }catch(error){
-      toast.error('Error updating profile: ' + error.message);
-      console.error('Error updating profile:', error);
-      setIsLoading(false);
-    }
-
-    // Simulate API call
-  }
-
   const handleEdit = () => {
     setIsEditing(true);
     setIsSaved(false);
@@ -75,7 +29,10 @@ export default function Profile() {
   const handleCancel = () => {
     setIsEditing(false);
     // Reset to original values (in real app, would fetch from server)
-
+    setFormData({
+      name: 'John Doe',
+      email: 'john.doe@example.com'
+    });
   };
 
   const handleSave = async (e) => {
@@ -168,7 +125,7 @@ export default function Profile() {
                     type="text"
                     required
                     value={formData.name}
-                    onChange={ (event)=> handleChange(event)}
+                    onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 text-gray-900"
                     placeholder="Enter your full name"
                   />
@@ -191,7 +148,7 @@ export default function Profile() {
                     type="email"
                     required
                     value={formData.email}
-                    onChange={(event)=>handleChange(event)}
+                    onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 text-gray-900"
                     placeholder="Enter your email address"
                     aria-describedby="email-description"
@@ -212,15 +169,17 @@ export default function Profile() {
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
-                  onClick={(event) => onSubmit(event)}
+                  onClick={handleSave}
                   disabled={isLoading || !formData.name.trim() || !formData.email.trim()}
                   className="flex-1 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   {isLoading ? (
                     <div className="flex items-center">
                       <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                             <image href={whiteSpinner} width="100%" height="100%" />
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
+                      Saving...
                     </div>
                   ) : (
                     'Save Changes'

@@ -24,9 +24,16 @@ export function useAuthStatus() {
             setLoading(false);
         });
 
+        if (signOut) {
+            auth.signOut();
+            setIsLoggedIn(false);
+            navigate(SIGN_IN_PATH);
+        }
+
     }, []);
 
     useEffect(() => {
+      
         if (signOut) {
             auth.signOut();
             setSignOut(false);
