@@ -1,6 +1,14 @@
 import React from 'react'
 import { useState } from 'react';
-import { getAuth } from 'firebase/auth';
+import { 
+  getAuth, 
+  updateProfile 
+} from 'firebase/auth';
+import { 
+  doc, 
+  updateDoc 
+} from 'firebase/firestore';
+import { db } from '../firebase'; // Adjust the import based on your project structure
 
 export default function Profile() {
   const auth = getAuth();
@@ -40,11 +48,22 @@ export default function Profile() {
     setIsLoading(true);
     
     // Simulate API call
-    setTimeout(() => {
-      console.log('Profile updated:', formData);
+    setTimeout(async () => {
+     
+      await updateProfile(auth.currentUser, {
+        displayName: formData.name,
+        email: formData.email
+      });
+
+      const userRef = doc(db, 'users', auth.currentUser.uid);
+      await updateDoc(userRef, {
+        name: formData.name,
+        email: formData.email
+      });
       setIsLoading(false);
       setIsEditing(false);
       setIsSaved(true);
+       console.log('Profile updated:', formData);
       
       // Hide success message after 3 seconds
       setTimeout(() => setIsSaved(false), 3000);
